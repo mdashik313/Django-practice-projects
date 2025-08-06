@@ -28,6 +28,18 @@ services:
       - .:/celery_app
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  
+  celery:
+    build: .
+    command: celery -A CeleryApp worker --loglevel=INFO
+    volumes:
+      - .:/celery_app
+    depends_on:
+      - web
+
 volumes:
   redis-data:
   postgres_data:

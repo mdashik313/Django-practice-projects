@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'test_db',
         'USER': 'admin',
         'PASSWORD': 'admin_123',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -129,7 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://127.0.0.1:8999/0'
+CELERY_BROKER_URL = 'redis://redis:6379'
 # set the celery result backend
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:8999/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
 # set the celery timezone
