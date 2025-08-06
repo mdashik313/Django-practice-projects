@@ -1,0 +1,54 @@
+services:
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: test-redis
+  #   command: "redis-server"
+  #   volumes:
+  #     - redis-data:/data
+  #   ports:
+  #     - "8999:6379"
+
+  # db:
+  #   image: postgres:15-alpine
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data/
+  #   environment:
+  #     - POSTGRES_PASSWORD=admin_123
+  #     - POSTGRES_USER=admin
+  #     - POSTGRES_DB=test_db
+  #   ports:
+  #     - "5432:5432"
+  
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8005"
+    container_name: celeryapp_v2
+
+    volumes:
+      - .:/celeryapp_v2
+    ports:
+      - "8005:8005"
+    # depends_on:
+    #   - db
+    #   - redis
+
+    networks:
+      - my_bridge
+  
+  celery:
+    build: .
+    command: celery -A celeryapp_v2 worker --loglevel=INFO
+    volumes:
+      - .:/celeryapp_v2
+    depends_on:
+      - web
+    networks:
+      - my_bridge
+
+# volumes:
+#   redis-data:
+#   postgres_data:
+
+networks:
+  my_bridge:
+    external: true
