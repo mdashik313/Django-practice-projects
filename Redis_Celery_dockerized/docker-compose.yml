@@ -1,0 +1,31 @@
+services:
+
+  redis:
+    image: redis:7-alpine
+    container_name: my_redis_broker
+    command: "redis-server"
+    volumes:
+      - redis-data:/data
+    ports:
+      - "8999:6379"
+    networks:
+      - my_bridge
+    
+  celery:
+    build: ../Django_PostgreSql_dockerized  #tells the docker to build an image using the Dockerfile found in the ../Django_PostgreSql_dockerized/
+                # since both project under same directory so go one step back ../
+    command: celery -A CeleryApp worker --loglevel=INFO
+    container_name: my_celery_worker
+    volumes:
+      - ./Django_PostgreSql_dockerized:/code  #mounts local Django project code into the container’s /code directory
+    
+    networks:
+      - my_bridge
+
+volumes:
+  redis-data:
+
+networks:
+  my_bridge:
+    external: true
+    

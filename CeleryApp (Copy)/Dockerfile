@@ -6,13 +6,13 @@ FROM python:3.12.3-slim
 ENV PYTHONUNBUFFERED 1
 
 # create root directory for our project in the container
-RUN mkdir /celeryapp_v2
+RUN mkdir /celery_app
 
 # Set the working directory to /celery_app
-WORKDIR /celeryapp_v2
+WORKDIR /celery_app
 
 # Copy the current directory contents into the container at /celery_app
-ADD . /celeryapp_v2/
+ADD . /celery_app/
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt 

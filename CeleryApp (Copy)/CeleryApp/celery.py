@@ -3,9 +3,9 @@ from celery import Celery
 from django.conf import settings
 
 # Set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celeryapp_v2.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CeleryApp.settings')
 
-app = Celery('celeryapp_v2') 
+app = Celery('CeleryApp') 
 
 # Configure Celery using settings from Django settings.py.
 app.config_from_object('django.conf:settings', namespace='CELERY')

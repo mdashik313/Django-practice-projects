@@ -1,0 +1,36 @@
+services:
+
+  web:
+    build: .
+    container_name: my_django_server
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    
+    volumes:
+      - .:/django_postgres
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - my_bridge
+  
+  db:
+    image: postgres:15-alpine
+    container_name: my_postgres_server
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=admin_123
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=postgres_testdb
+    ports:
+      - "5432:5432"
+    networks:
+      - my_bridge
+
+volumes:
+  postgres_data:
+
+networks:
+  my_bridge:
+    external: true

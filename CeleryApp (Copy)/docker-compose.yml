@@ -7,6 +7,8 @@ services:
   #     - redis-data:/data
   #   ports:
   #     - "8999:6379"
+  #   networks:
+  #     - my_bridge
 
   # db:
   #   image: postgres:15-alpine
@@ -18,28 +20,29 @@ services:
   #     - POSTGRES_DB=test_db
   #   ports:
   #     - "5432:5432"
+  #   networks:
+  #     - my_bridge
   
   web:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8005"
-    container_name: celeryapp_v2
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: celery_app
 
     volumes:
-      - .:/celeryapp_v2
+      - .:/celery_app
     ports:
-      - "8005:8005"
+      - "8000:8000"
     # depends_on:
     #   - db
     #   - redis
-
     networks:
       - my_bridge
   
   celery:
     build: .
-    command: celery -A celeryapp_v2 worker --loglevel=INFO
+    command: celery -A CeleryApp worker --loglevel=INFO
     volumes:
-      - .:/celeryapp_v2
+      - .:/celery_app
     depends_on:
       - web
     networks:
